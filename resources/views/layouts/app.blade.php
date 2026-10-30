@@ -121,9 +121,9 @@
                 @endauth
 
                 <!-- Brand Logo (Link to Home) -->
-                <a href="{{ route('home') }}" class="group shrink-0" title="Read2Buy.com">
+                <a href="{{ route('home') }}" class="group shrink-0" title="Read2Buy">
                     <span class="font-serif-editorial text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 group-hover:text-stone-700 transition-colors">
-                        Read2Buy<span class="text-stone-400 font-sans text-xl font-normal">.com</span>
+                        Read2Buy
                     </span>
                 </a>
             </div>

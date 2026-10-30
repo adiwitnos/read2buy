@@ -134,7 +134,7 @@ class CatalogAndCurationSeeder extends Seeder
                     'weight_capacity' => '400 lbs (181 kg)',
                     'warranty' => '12-Year 24/7 Multi-Shift Manufacturer Warranty',
                 ],
-                'primary_image' => 'https://images.unsplash.com/photo-1580481077195-c3a82104e362?auto=format&fit=crop&w=1200&q=80',
+                'primary_image' => 'https://images.unsplash.com/photo-1671063125699-2c25dac5d1c5?auto=format&fit=crop&w=1200&q=80',
                 'estimated_price_min' => 1350,
                 'estimated_price_max' => 1550,
                 'is_featured' => true,

@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandName('Read2Buy.com')
+            ->brandName('Read2Buy')
             ->homeUrl('/')
             ->globalSearch(false)
             ->userMenu(false)
