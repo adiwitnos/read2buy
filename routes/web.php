@@ -60,12 +60,14 @@ Route::get('/disclaimer', [LegalController::class, 'disclaimer'])->name('legal.d
 Route::get('/privacy-policy', [LegalController::class, 'privacyPolicy'])->name('legal.privacy-policy');
 Route::get('/terms', [LegalController::class, 'termsOfService'])->name('legal.terms');
 
-// Outbound Affiliate Routing (Safe internal click logging)
-Route::get('/out/{offer}', [AffiliateRedirectController::class, 'redirect'])->name('affiliate.out');
-Route::get('/affiliate-redirect/{offer}', [AffiliateRedirectController::class, 'redirect'])->name('affiliate.redirect');
+// Outbound Affiliate Routing (Safe internal click logging with rate limiting)
+Route::middleware('throttle:60,1')->group(function (): void {
+    Route::get('/out/{offer}', [AffiliateRedirectController::class, 'redirect'])->name('affiliate.out');
+    Route::get('/affiliate-redirect/{offer}', [AffiliateRedirectController::class, 'redirect'])->name('affiliate.redirect');
+});
 
 // Member Bookmark Management
-Route::middleware('auth')->group(function (): void {
+Route::middleware(['auth', 'throttle:60,1'])->group(function (): void {
     Route::post('/bookmark/{product}', [BookmarkController::class, 'toggle'])->name('bookmark.toggle');
     Route::delete('/bookmark/{bookmark}', [BookmarkController::class, 'destroy'])->name('bookmark.destroy');
 });

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Contents;
 
 use App\Enums\ContentStatus;
 use App\Enums\ContentType;
+use App\Enums\ProductTier;
 use App\Filament\Resources\Contents\Pages\ManageContents;
 use App\Models\Content;
 use BackedEnum;
@@ -12,6 +13,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -100,6 +102,44 @@ class ContentResource extends Resource
                     ->label('Article Body (Markdown / HTML)')
                     ->rows(10)
                     ->required(),
+
+                Repeater::make('contentProducts')
+                    ->label('Curated Products Featured in This Guide / Story')
+                    ->relationship('contentProducts')
+                    ->schema([
+                        Select::make('product_id')
+                            ->label('Product')
+                            ->relationship('product', 'name')
+                            ->required()
+                            ->searchable()
+                            ->preload(),
+
+                        Select::make('tier')
+                            ->label('Curation Tier')
+                            ->options([
+                                ProductTier::Essentials->value => 'Essentials (Budget / Accessible)',
+                                ProductTier::Select->value => 'Select (Optimal Daily Balance)',
+                                ProductTier::Signature->value => 'Signature (Uncompromising Capability)',
+                            ])
+                            ->default(ProductTier::Select->value)
+                            ->required(),
+
+                        TextInput::make('curation_reason')
+                            ->label('Why this was curated')
+                            ->placeholder('e.g. Best price-to-durability ratio')
+                            ->required(),
+
+                        TextInput::make('context_headline')
+                            ->label('Context Headline (Optional)')
+                            ->placeholder('e.g. The Everyday Standard'),
+
+                        TextInput::make('sort_order')
+                            ->label('Sort Order')
+                            ->numeric()
+                            ->default(1),
+                    ])
+                    ->columnSpanFull()
+                    ->collapsible(),
 
                 TextInput::make('meta_title')
                     ->label('SEO Meta Title')

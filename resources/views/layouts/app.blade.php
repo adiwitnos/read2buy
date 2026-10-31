@@ -7,31 +7,32 @@
     <meta name="description" content="@yield('meta_description', 'Read before you buy. Research-backed product curation and buying guides.')">
     
     <!-- OpenGraph / Social -->
-    <meta property="og:title" content="@yield('title', 'Read2Buy — Informed Choices for Every Purchase')">
+    <meta property="og:title" content="@yield('title', ($siteSettings['site_name'] ?? 'Read2Buy') . ' — Informed Choices for Every Purchase')">
     <meta property="og:description" content="@yield('meta_description', 'Read before you buy. Research-backed product curation and buying guides.')">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Read2Buy.com">
+    <meta property="og:site_name" content="{{ $siteSettings['site_name'] ?? 'Read2Buy.com' }}">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', ($siteSettings['site_name'] ?? 'Read2Buy') . ' — Informed Choices for Every Purchase')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Read before you buy. Research-backed product curation and buying guides.')">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
     @stack('meta')
 
-    @php
-        $gaId = \App\Models\SiteSetting::get('tracking_ga_id');
-        $metaPixelId = \App\Models\SiteSetting::get('tracking_meta_pixel_id');
-        $customHead = \App\Models\SiteSetting::get('tracking_custom_head');
-    @endphp
-
-    @if(!empty($gaId))
+    @if(!empty($siteSettings['ga_id']))
         <!-- Google Analytics GA4 -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $siteSettings['ga_id'] }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '{{ $gaId }}');
+            gtag('config', '{{ $siteSettings['ga_id'] }}');
         </script>
     @endif
 
-    @if(!empty($metaPixelId))
+    @if(!empty($siteSettings['meta_pixel_id']))
         <!-- Meta Pixel -->
         <script>
             !function(f,b,e,v,n,t,s)
@@ -42,13 +43,13 @@
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '{{ $metaPixelId }}');
+            fbq('init', '{{ $siteSettings['meta_pixel_id'] }}');
             fbq('track', 'PageView');
         </script>
     @endif
 
-    @if(!empty($customHead))
-        {!! $customHead !!}
+    @if(!empty($siteSettings['custom_head']))
+        {!! $siteSettings['custom_head'] !!}
     @endif
 
     <script>
@@ -413,11 +414,8 @@
         </div>
     </footer>
 
-    @php
-        $customBody = \App\Models\SiteSetting::get('tracking_custom_body');
-    @endphp
-    @if(!empty($customBody))
-        {!! $customBody !!}
+    @if(!empty($siteSettings['custom_body']))
+        {!! $siteSettings['custom_body'] !!}
     @endif
 
     @auth

@@ -1,7 +1,68 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' — Editorial Curation | Read2Buy.com')
+@section('title', $product->name . ' — Editorial Curation | ' . ($siteSettings['site_name'] ?? 'Read2Buy.com'))
 @section('meta_description', $product->summary ?? $product->tagline)
+
+@push('meta')
+    <!-- Canonical -->
+    <link rel="canonical" href="{{ route('showroom.product', $product->slug) }}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="product">
+    <meta property="og:title" content="{{ $product->name }} — {{ $siteSettings['site_name'] ?? 'Read2Buy.com' }}">
+    <meta property="og:description" content="{{ $product->summary ?? $product->tagline }}">
+    @if($product->primary_image)
+        <meta property="og:image" content="{{ $product->primary_image }}">
+    @endif
+
+    <!-- Structured Data JSON-LD (Product, Review, AggregateRating, Offers) -->
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'image' => $product->primary_image ? [$product->primary_image] : [],
+        'description' => $product->summary ?? $product->description,
+        'brand' => [
+            '@type' => 'Brand',
+            'name' => $product->brand ?? 'Independent Maker',
+        ],
+        'category' => $product->category?->name,
+        'offers' => $product->primaryAffiliateOffer ? [
+            '@type' => 'Offer',
+            'url' => route('affiliate.out', $product->primaryAffiliateOffer->id),
+            'priceCurrency' => 'USD',
+            'price' => $product->primaryAffiliateOffer->price ?? $product->estimated_price_min,
+            'availability' => 'https://schema.org/InStock',
+            'seller' => [
+                '@type' => 'Organization',
+                'name' => $product->primaryAffiliateOffer->seller_name ?? 'Authorized Retailer',
+            ],
+        ] : null,
+        'aggregateRating' => $product->curationScore ? [
+            '@type' => 'AggregateRating',
+            'ratingValue' => (string) $product->curationScore->overall_score,
+            'bestRating' => '10',
+            'worstRating' => '1',
+            'ratingCount' => 1,
+            'reviewCount' => 1,
+        ] : null,
+        'review' => $product->curationScore ? [
+            '@type' => 'Review',
+            'reviewRating' => [
+                '@type' => 'Rating',
+                'ratingValue' => (string) $product->curationScore->overall_score,
+                'bestRating' => '10',
+            ],
+            'author' => [
+                '@type' => 'Organization',
+                'name' => 'The Read2Buy Editorial Desk',
+            ],
+            'reviewBody' => $product->curationScore->editorial_verdict ?? $product->summary,
+        ] : null,
+    ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+@endpush
 
 @section('content')
 <!-- Breadcrumbs -->

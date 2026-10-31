@@ -14,10 +14,23 @@ class AffiliateRedirectController extends Controller
      */
     public function redirect(Request $request, AffiliateOffer $offer): RedirectResponse
     {
-        if (! $offer->is_active) {
-            return redirect()->route('showroom.product', [
-                'slug' => $offer->product->slug,
-            ])->with('error', 'Penawaran ini saat ini sedang tidak aktif.');
+        // Safe check for active offer and valid product link
+        if (! $offer->is_active || empty($offer->affiliate_url)) {
+            $fallbackUrl = $offer->product?->slug
+                ? route('showroom.product', ['slug' => $offer->product->slug])
+                : route('home');
+
+            return redirect()->to($fallbackUrl)->with('error', 'This offer is currently not active.');
+        }
+
+        // Validate safe outbound scheme (prevent open redirect to javascript:, data:, or malformed schemas)
+        $parsedUrl = parse_url($offer->affiliate_url);
+        if (empty($parsedUrl['scheme']) || ! in_array(strtolower($parsedUrl['scheme']), ['http', 'https'], true) || empty($parsedUrl['host'])) {
+            $fallbackUrl = $offer->product?->slug
+                ? route('showroom.product', ['slug' => $offer->product->slug])
+                : route('home');
+
+            return redirect()->to($fallbackUrl)->with('error', 'Invalid merchant destination link.');
         }
 
         // Record analytical outbound click event

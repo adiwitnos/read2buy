@@ -10,7 +10,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -92,6 +94,23 @@ class ProductResource extends Resource
                     ->label('Publication Date')
                     ->default(now()),
 
+                TextInput::make('primary_image')
+                    ->label('Primary Image URL / Path')
+                    ->placeholder('https://images.unsplash.com/... or /images/...')
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+
+                TagsInput::make('gallery_images')
+                    ->label('Gallery Image URLs')
+                    ->placeholder('Add image URL')
+                    ->columnSpanFull(),
+
+                KeyValue::make('specifications')
+                    ->label('Technical Specifications')
+                    ->keyLabel('Parameter (e.g. material, weight)')
+                    ->valueLabel('Value (e.g. Aluminum, 1.2kg)')
+                    ->columnSpanFull(),
+
                 Textarea::make('summary')
                     ->label('Executive Summary (The Read2Buy Perspective)')
                     ->rows(3)
@@ -136,10 +155,11 @@ class ProductResource extends Resource
                         $min = $record->estimated_price_min;
                         $max = $record->estimated_price_max;
                         if ($min && $max) {
-                            return '$' . number_format($min, 2) . ' – $' . number_format($max, 2);
+                            return '$'.number_format($min, 2).' – $'.number_format($max, 2);
                         } elseif ($min) {
-                            return 'From $' . number_format($min, 2);
+                            return 'From $'.number_format($min, 2);
                         }
+
                         return '—';
                     }),
 

@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /out/
+Disallow: /affiliate-redirect/
+Disallow: /bookmark/
+
+Sitemap: https://read2buy.com/sitemap.xml

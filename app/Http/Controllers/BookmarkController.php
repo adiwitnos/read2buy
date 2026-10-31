@@ -25,14 +25,14 @@ class BookmarkController extends Controller
 
         if ($existing) {
             $existing->delete();
-            $message = "Produk {$product->name} berhasil dihapus dari bookmark.";
+            $message = "Product \"{$product->name}\" was removed from your bookmarks.";
         } else {
             ProductBookmark::create([
                 'user_id' => $user->id,
                 'product_id' => $product->id,
                 'notes' => $request->input('notes'),
             ]);
-            $message = "Produk {$product->name} berhasil disimpan ke bookmark Anda.";
+            $message = "Product \"{$product->name}\" was saved to your bookmarks.";
         }
 
         return back()->with('status', $message);
@@ -47,12 +47,12 @@ class BookmarkController extends Controller
         $user = Auth::user();
 
         if ($bookmark->user_id !== $user->id) {
-            abort(403, 'Akses tidak sah ke bookmark ini.');
+            abort(403, 'Unauthorized access to this bookmark.');
         }
 
-        $productName = $bookmark->product?->name ?? 'Produk';
+        $productName = $bookmark->product?->name ?? 'Product';
         $bookmark->delete();
 
-        return redirect()->route('dashboard')->with('status', "Bookmark {$productName} berhasil dihapus.");
+        return redirect()->route('dashboard')->with('status', "Bookmark for \"{$productName}\" was removed.");
     }
 }

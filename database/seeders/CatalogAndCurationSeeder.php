@@ -532,7 +532,7 @@ class CatalogAndCurationSeeder extends Seeder
                 'published_at' => now()->subDays(7),
                 'meta_title' => 'Compact Desk Ergonomics Guide — Read2Buy',
                 'meta_description' => 'Comprehensive ergonomic guide for small home offices, dissecting seating posture, display distance, and asymmetric illumination.',
-                'body' => <<<MARKDOWN
+                'body' => <<<'MARKDOWN'
 ### Introduction: The True Cost of Compact Workspaces
 
 Most people do not suffer from back or wrist pain because they lack willpower; they suffer because physical ergonomics cannot be solved through positive thinking. When working in tight living spaces, standard office furniture fails. 
@@ -609,7 +609,7 @@ MARKDOWN
                 'published_at' => now()->subDays(5),
                 'meta_title' => 'Studio Overhaul Case Study — Read2Buy Stories',
                 'meta_description' => 'Real-world story of redesigning a studio setup for sustained creative concentration.',
-                'body' => <<<MARKDOWN
+                'body' => <<<'MARKDOWN'
 ### The Cluttered Studio Paradox
 
 For four years, Marcus ran an independent structural design practice surrounded by cords, wobbly monitors, and noisy fans. Even with noise-canceling headphones, fatigue set in by 2 PM every day.
@@ -645,7 +645,7 @@ MARKDOWN
                 'published_at' => now()->subDays(3),
                 'meta_title' => 'The Read2Buy Evaluation Methodology — Research Notes',
                 'meta_description' => 'Detailed explanation of The Read2Buy Standard, $0 review policy, and primary research methodology.',
-                'body' => <<<MARKDOWN
+                'body' => <<<'MARKDOWN'
 ### Why Modern Product Reviews Are Broken
 
 The traditional digital gadget review ecosystem operates on an unsustainable model: content creators receive free loaner units for 72 hours, film an enthusiastic unboxing, and publish conclusions before the paint has even settled.

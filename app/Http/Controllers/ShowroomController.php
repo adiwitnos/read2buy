@@ -7,6 +7,7 @@ use App\Models\Collection;
 use App\Models\Content;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ShowroomController extends Controller
@@ -208,16 +209,10 @@ class ShowroomController extends Controller
     }
 
     /**
-     * Display curated buying guides list.
+     * Redirect to the central curated buying guides listing.
      */
-    public function guides(): View
+    public function guides(): RedirectResponse
     {
-        $featuredCollection = Collection::query()
-            ->where('slug', 'the-focused-professional')
-            ->first();
-
-        return view('showroom.guides', [
-            'featuredCollection' => $featuredCollection,
-        ]);
+        return redirect()->route('content.guides');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\AffiliatePrograms;
 
-use App\Enums\AffiliatePlatform;
 use App\Enums\ProgramStatus;
 use App\Filament\Resources\AffiliatePrograms\Pages\ManageAffiliatePrograms;
 use App\Models\AffiliateProgram;

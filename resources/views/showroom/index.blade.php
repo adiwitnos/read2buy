@@ -28,11 +28,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl space-y-6">
             <h1 class="font-serif-editorial text-4xl sm:text-6xl font-bold tracking-tight text-stone-900 leading-[1.15]">
-                Read before you buy.
+                {{ $siteSettings['hero_headline'] ?? 'Read before you buy.' }}
             </h1>
 
             <p class="text-lg sm:text-xl text-stone-600 leading-relaxed font-light max-w-2xl">
-                Not a superficial rankings board, but an <strong>independent research desk</strong>. We dissect verified strengths, hidden limitations, and real-world trade-offs (<strong>Essentials</strong>, <strong>Select</strong>, <strong>Signature</strong>) so you can make informed, confident choices.
+                {!! $siteSettings['hero_description'] ?? 'Not a superficial rankings board, but an <strong>independent research desk</strong>. We dissect verified strengths, hidden limitations, and real-world trade-offs (<strong>Essentials</strong>, <strong>Select</strong>, <strong>Signature</strong>) so you can make informed, confident choices.' !!}
             </p>
 
             <div class="pt-4 flex flex-wrap items-center gap-4">

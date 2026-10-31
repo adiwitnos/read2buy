@@ -5,8 +5,10 @@ namespace App\Filament\Widgets;
 use App\Enums\ContentStatus;
 use App\Enums\ContentType;
 use App\Enums\ProgramStatus;
+use App\Models\AffiliateOffer;
 use App\Models\AffiliateProgram;
 use App\Models\Content;
+use App\Models\OutboundClick;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Filament\Support\Icons\Heroicon;
@@ -30,6 +32,9 @@ class AdminStatsOverview extends StatsOverviewWidget
         $metaPixelId = SiteSetting::get('tracking_meta_pixel_id');
         $hasTracking = ! empty($gaId) || ! empty($metaPixelId);
 
+        $totalClicks = OutboundClick::count();
+        $totalOffers = AffiliateOffer::where('is_active', true)->count();
+
         $totalSitemapUrls = $activeProducts
             + Content::where('status', ContentStatus::Published)->count()
             + 13; // Static & institutional pages
@@ -42,16 +47,16 @@ class AdminStatsOverview extends StatsOverviewWidget
                 ->url(url('/admin/contents')),
 
             Stat::make('Curated Products', (string) $activeProducts)
-                ->description('Active curated selections')
+                ->description("{$totalOffers} active affiliate offers")
                 ->descriptionIcon(Heroicon::OutlinedSparkles)
                 ->color('success')
-                ->url(url('/')),
+                ->url(url('/admin/products')),
 
-            Stat::make('XML Sitemap', (string) $totalSitemapUrls.' URLs')
-                ->description('Indexed for Google & AI search')
-                ->descriptionIcon(Heroicon::OutlinedGlobeAlt)
+            Stat::make('Outbound Clicks', (string) $totalClicks)
+                ->description('Total merchant referrals logged')
+                ->descriptionIcon(Heroicon::OutlinedCursorArrowRays)
                 ->color('info')
-                ->url(url('/admin/sitemap-xml-page')),
+                ->url(url('/admin/outbound-clicks')),
 
             Stat::make('Tracking & Pixels', $hasTracking ? 'Active' : 'Unconfigured')
                 ->description($hasTracking ? 'GA4 & Meta Pixel active' : 'Click to configure scripts')
