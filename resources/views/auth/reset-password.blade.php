@@ -89,9 +89,11 @@
                 <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700">
                     Security Verification
                 </label>
-                <div class="cf-turnstile flex justify-center sm:justify-start" data-sitekey="{{ config('services.turnstile.key') }}" data-action="reset-password" data-theme="light"></div>
+                <div class="flex justify-center">
+                    <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.key') }}" data-action="reset-password" data-theme="light"></div>
+                </div>
                 @error('cf-turnstile-response')
-                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
+                    <p class="text-xs text-red-600 font-medium text-center">{{ $message }}</p>
                 @enderror
             </div>
 
