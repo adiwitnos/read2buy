@@ -124,10 +124,20 @@
                 <!-- Brand Logo (Link to Home) -->
                 <a href="{{ route('home') }}" class="group shrink-0" title="Read2Buy">
                     <span class="font-serif-editorial text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 group-hover:text-stone-700 transition-colors">
-                        Read2Buy
+                        Read<span class="text-[#e94000]">2</span>Buy
                     </span>
                 </a>
             </div>
+
+            <!-- Center Navigation (Desktop Guest) -->
+            @guest
+                <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-semibold text-stone-600">
+                    <a href="{{ route('home') }}#panduan-kurasi" class="hover:text-stone-950 transition-colors">Buying Guides</a>
+                    <a href="{{ route('home') }}#komparasi-produk" class="hover:text-stone-950 transition-colors">Compare</a>
+                    <a href="{{ route('content.stories') }}" class="hover:text-stone-950 transition-colors">Stories</a>
+                    <a href="{{ route('showroom.philosophy') }}" class="hover:text-stone-950 transition-colors">Philosophy</a>
+                </nav>
+            @endguest
 
             <!-- Right Controls: Guest vs Member/Administrator -->
             @guest
@@ -323,7 +333,7 @@
                 <!-- Column 1 -->
                 <div class="space-y-3">
                     <span class="font-serif-editorial text-2xl font-bold tracking-tight text-white block">
-                        Read2Buy<span class="text-stone-500 font-sans text-lg font-normal">.com</span>
+                        Read<span class="text-[#e94000]">2</span>Buy<span class="text-stone-500 font-sans text-lg font-normal">.com</span>
                     </span>
                     <p class="text-stone-200 text-sm italic font-serif-editorial leading-relaxed">
                         &ldquo;Informed Choices for Every Purchase.&rdquo;
