@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\SimpleCaptcha;
+use App\Rules\TurnstileRule;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,8 +19,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        SimpleCaptcha::generate();
-
         return view('auth.login');
     }
 
@@ -47,8 +45,10 @@ class AuthenticatedSessionController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'captcha' => SimpleCaptcha::rules(),
-        ], SimpleCaptcha::messages());
+            'cf-turnstile-response' => ['required', new TurnstileRule('login')],
+        ], [
+            'cf-turnstile-response.required' => 'Verifikasi keamanan wajib diselesaikan.',
+        ]);
 
         if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             RateLimiter::hit($throttleKey);
@@ -57,8 +57,6 @@ class AuthenticatedSessionController extends Controller
                 'email' => trans('auth.failed'),
             ]);
         }
-
-        SimpleCaptcha::clear();
 
         RateLimiter::clear($throttleKey);
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\SimpleCaptcha;
+use App\Rules\TurnstileRule;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,8 +16,6 @@ class PasswordResetLinkController extends Controller
      */
     public function create(): View
     {
-        SimpleCaptcha::generate();
-
         return view('auth.forgot-password');
     }
 
@@ -28,10 +26,10 @@ class PasswordResetLinkController extends Controller
     {
         $request->validate([
             'email' => ['required', 'email'],
-            'captcha' => SimpleCaptcha::rules(),
-        ], SimpleCaptcha::messages());
-
-        SimpleCaptcha::clear();
+            'cf-turnstile-response' => ['required', new TurnstileRule('forgot-password')],
+        ], [
+            'cf-turnstile-response.required' => 'Verifikasi keamanan wajib diselesaikan.',
+        ]);
 
         $status = Password::sendResetLink(
             $request->only('email')

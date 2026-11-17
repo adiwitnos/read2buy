@@ -87,27 +87,14 @@
                 </label>
             </div>
 
-            <!-- Simple Captcha -->
-            <div>
-                <div class="flex items-center justify-between mb-1.5">
-                    <label for="captcha" class="block text-xs font-semibold uppercase tracking-wider text-stone-700">
-                        Security Verification
-                    </label>
-                    <span class="text-xs text-stone-600 font-mono">
-                        Calculate: <strong class="text-stone-900 font-bold bg-stone-100 px-2 py-0.5 rounded border border-stone-200">{{ \App\Http\SimpleCaptcha::getQuestion() }} = ?</strong>
-                    </span>
-                </div>
-                <input 
-                    id="captcha" 
-                    type="number" 
-                    name="captcha" 
-                    required 
-                    inputmode="numeric"
-                    class="w-full px-3.5 py-2.5 bg-stone-50/50 border border-stone-300 rounded-lg text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all @error('captcha') border-red-500 @enderror"
-                    placeholder="Enter the calculation result"
-                >
-                @error('captcha')
-                    <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
+            <!-- Cloudflare Turnstile -->
+            <div class="space-y-1.5">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700">
+                    Security Verification
+                </label>
+                <div class="cf-turnstile flex justify-center sm:justify-start" data-sitekey="{{ config('services.turnstile.key') }}" data-action="login" data-theme="light"></div>
+                @error('cf-turnstile-response')
+                    <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -135,3 +122,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+@endpush

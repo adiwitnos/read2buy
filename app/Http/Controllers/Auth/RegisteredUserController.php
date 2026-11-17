@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Http\SimpleCaptcha;
+use App\Rules\TurnstileRule;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -21,8 +21,6 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        SimpleCaptcha::generate();
-
         return view('auth.register');
     }
 
@@ -35,10 +33,10 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'captcha' => SimpleCaptcha::rules(),
-        ], SimpleCaptcha::messages());
-
-        SimpleCaptcha::clear();
+            'cf-turnstile-response' => ['required', new TurnstileRule('register')],
+        ], [
+            'cf-turnstile-response.required' => 'Verifikasi keamanan wajib diselesaikan.',
+        ]);
 
         $user = User::create([
             'name' => $request->name,

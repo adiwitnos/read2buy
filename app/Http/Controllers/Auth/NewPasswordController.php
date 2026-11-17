@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\SimpleCaptcha;
+use App\Rules\TurnstileRule;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\View\View;
@@ -21,8 +21,6 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        SimpleCaptcha::generate();
-
         return view('auth.reset-password', ['request' => $request]);
     }
 
@@ -35,10 +33,10 @@ class NewPasswordController extends Controller
             'token' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'captcha' => SimpleCaptcha::rules(),
-        ], SimpleCaptcha::messages());
-
-        SimpleCaptcha::clear();
+            'cf-turnstile-response' => ['required', new TurnstileRule('reset-password')],
+        ], [
+            'cf-turnstile-response.required' => 'Verifikasi keamanan wajib diselesaikan.',
+        ]);
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),

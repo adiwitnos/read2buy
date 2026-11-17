@@ -472,5 +472,6 @@
     </script>
     @endauth
 
+    @stack('scripts')
 </body>
 </html>
