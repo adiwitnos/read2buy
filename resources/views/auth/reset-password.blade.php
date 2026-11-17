@@ -85,15 +85,12 @@
             </div>
 
             <!-- Cloudflare Turnstile -->
-            <div class="space-y-1.5">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-stone-700">
-                    Security Verification
-                </label>
+            <div>
                 <div class="flex justify-center">
                     <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.key') }}" data-action="reset-password" data-theme="light"></div>
                 </div>
                 @error('cf-turnstile-response')
-                    <p class="text-xs text-red-600 font-medium text-center">{{ $message }}</p>
+                    <p class="mt-1.5 text-xs text-red-600 font-medium text-center">{{ $message }}</p>
                 @enderror
             </div>
 
